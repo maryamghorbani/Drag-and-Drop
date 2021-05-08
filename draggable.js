@@ -1,6 +1,10 @@
 class draggable {
     constructor(options) {
         this.setupList(options);
+
+        for (let listItem of options.el.children) {
+            this.addDnDHadler(listItem)
+        }
     }
 
     setupList(options) {
@@ -13,5 +17,8 @@ class draggable {
         if (! typeof template == "function" ) throw Error('Please add a function as template');
 
         list.forEach( item => element.innerHTML += template(item) )
+    }
+    addDnDHadler(element) {
+        element.setAttribute('draggable' , true)
     }
 }
