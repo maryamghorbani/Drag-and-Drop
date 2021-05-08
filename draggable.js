@@ -19,6 +19,34 @@ class draggable {
         list.forEach( item => element.innerHTML += template(item) )
     }
     addDnDHadler(element) {
-        element.setAttribute('draggable' , true)
+        element.setAttribute('draggable' , true);
+
+
+        element.addEventListener('dragstart', this.handleDragStart.bind(this));
+        element.addEventListener('dragenter', this.handleDragEnter.bind(this));
+        element.addEventListener('dragover', this.handleDragOver.bind(this));
+        element.addEventListener('dragleave', this.handleDragLeave.bind(this));
+        element.addEventListener('drop', this.handleDrop.bind(this));
+        element.addEventListener('dragend', this.handleDragEnd.bind(this) );
+    }
+
+
+    handleDragStart (e) {
+        console.log('drag start' , e.target);
+    }
+    handleDragEnter (e) {
+        console.log('drag enter' , e.target);
+    }
+    handleDragOver (e) {
+        console.log('drag over' , e.target);
+    }
+    handleDragLeave (e) {
+        console.log('drag leave' , e.target);
+    }
+    handleDrop (e) {
+        console.log('drop' , e.target);
+    }
+    handleDragEnd (e) {
+        console.log('drag end' , e.target);
     }
 }
