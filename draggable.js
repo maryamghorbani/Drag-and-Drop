@@ -12,6 +12,6 @@ class draggable {
         if (! template) throw Error('Please add a template function');
         if (! typeof template == "function" ) throw Error('Please add a function as template');
 
-
+        list.forEach( item => element.innerHTML += template(item) )
     }
 }
