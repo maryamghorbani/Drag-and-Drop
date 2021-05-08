@@ -1,4 +1,5 @@
 class draggable {
+    dragSrcEl;
     constructor(options) {
         this.setupList(options);
 
@@ -14,7 +15,7 @@ class draggable {
         if (! list) throw Error('The data is not exists');
         if (! Array.isArray(list)) throw Error('The list is not an array, please insert an array');
         if (! template) throw Error('Please add a template function');
-        if (! typeof template == "function" ) throw Error('Please add a function as template');
+        if ( typeof template !== "function" ) throw Error('Please add a function as template');
 
         list.forEach( item => element.innerHTML += template(item) )
     }
@@ -32,21 +33,36 @@ class draggable {
 
 
     handleDragStart (e) {
-        console.log('drag start' , e.target);
+        this.dragSrcEl = e.target;
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/html' , e.target.outerHTML);
+
+        e.target.classList.add('dragElem')
     }
     handleDragEnter (e) {
-        console.log('drag enter' , e.target);
     }
     handleDragOver (e) {
-        console.log('drag over' , e.target);
+        if (e.preventDefault) e.preventDefault();
+        e.target.classList.add('over')
     }
     handleDragLeave (e) {
-        console.log('drag leave' , e.target);
+        e.target.classList.remove('over')
     }
     handleDrop (e) {
-        console.log('drop' , e.target);
+        e.target.classList.remove('over');
+        let target = e.target.closest('.list-item');
+        
+        if ( this.dragSrcEl !== target) {
+            target.parentNode.removeChild(this.dragSrcEl);
+
+            let dropHTML = e.dataTransfer.getData('text/html');
+            target.insertAdjacentHTML('beforebegin' , dropHTML);
+
+            this.addDnDHadler(target.previousSibling)
+        }
+        e.target.classList.remove('over');
     }
     handleDragEnd (e) {
-        console.log('drag end' , e.target);
+        e.target.classList.remove('dragElem');
     }
 }
