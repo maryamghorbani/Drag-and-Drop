@@ -1,10 +1,15 @@
 class draggable {
     dragSrcEl;
+    list;
+    update;
+
     constructor(options) {
         this.setupList(options);
+        this.list = options.list;
+        if (options.update) this.update = options.update;
 
         for (let listItem of options.el.children) {
-            this.addDnDHadler(listItem)
+            this.addDnDHandler(listItem)
         }
     }
 
@@ -19,7 +24,7 @@ class draggable {
 
         list.forEach( item => element.innerHTML += template(item) )
     }
-    addDnDHadler(element) {
+    addDnDHandler(element) {
         element.setAttribute('draggable' , true);
 
 
@@ -58,11 +63,15 @@ class draggable {
             let dropHTML = e.dataTransfer.getData('text/html');
             target.insertAdjacentHTML('beforebegin' , dropHTML);
 
-            this.addDnDHadler(target.previousSibling)
+            this.addDnDHandler(target.previousSibling)
         }
         e.target.classList.remove('over');
     }
     handleDragEnd (e) {
         e.target.classList.remove('dragElem');
+
+        let newList = [];
+        list.querySelectorAll('.list-item').forEach(elm => newList.push(this.list.find(item => elm.id == item.id)));
+        this.update(newList);
     }
 }
